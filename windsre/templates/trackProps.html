@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <title>Enter the address to get comparables</title>
+</head>
+
+<body>
+
+	<div class="row background">
+    <div class="col-xs-12 well">
+      <h2>Displaying properties for project $project</h2>
+      
+  	  <table border="0" cellpadding="5" style="width:50%">
+     	<?python
+    	  addressDict = {}
+    	  
+    	  for key,value in kw.items():
+    	  	for key1,value1 in kw[key].items():
+    	  		addressString =  "%s %s %s | price: %s" % (kw[key][key1]['Property Address'], kw[key][key1]['State'], kw[key][key1]['Zip'], kw[key][key1]['Turnkey/Sales Price'])
+    	  		addressDict[kw[key][key1]['id']] = addressString 
+    	  			
+        ?>
+        <form action="${tg.url('/plot')}">
+        	<input type="hidden" name="project" value="$project"></input>
+  			<tr py:for="x, value in addressDict.items()" >
+  				<td><input type="checkbox" name="property" value="${x}" checked="true"></input></td>
+  				
+  				<td><a href="${tg.url('/graphs/' + projectName + '-address' + str(x) + '.pkl.png')}">${value}</a></td>
+  			</tr>
+  			<tr>
+  				<td></td>
+  				<td></td>
+  				<td>${trackPropsForm.display()}</td>
+  			</tr>
+  		</form>
+  	  </table>
+ 	</div>
+  </div>
+</body>
+</html>

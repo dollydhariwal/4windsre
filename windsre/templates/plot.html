@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <title>Get the views for your properties for project ${kw['project']}</title>
+</head>
+
+<body>
+	<div class="row">
+    <div class="col-xs-12 well">
+      <h2>Get Views for your listing </h2>
+      
+     
+      <table border="1" cellpadding="10" style="width:100%">
+      	<tr>
+      		<th> Address | Price</th>
+			<th> 2015 </th>
+    	</tr>
+    	
+    	
+    	<?python
+    	  addressDict = {}
+    	  
+    	  for key,value in prop_dict.items():
+    	  	addressString =  "%s %s %s | price: %s" % (value['Property Address'], value['State'], value['Zip'], value['Turnkey/Sales Price'])
+    	  	addressDict[value['id']] = addressString 
+    	  			
+        ?>
+  		<tr py:for="x, value in addressDict.items()" >
+  			<td>${value}</td>
+  			<td><embed height="500" width="500" src="${tg.url('/graphs/' + projectName + '-address' + str(x) + '.pkl.png')}" /></td>
+  		</tr>
+    	 		
+		</table> 
+      
+ 	</div>
+  </div>
+</body>
+</html>

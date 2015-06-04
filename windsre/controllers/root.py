@@ -17,6 +17,8 @@ from windsre.controllers.locateAddresses import AddressController, SelectAddress
 from windsre.controllers.getComps import CompController, CompAddressForm
 from windsre.controllers.project import ProjectController
 from windsre.controllers.salesProject import postAdForm,trackPropsForm
+from windsre.controllers.trackProps import TrackPropsController, trackPropsForm
+from windsre.controllers.plot import PlotController
 
 
 
@@ -132,6 +134,7 @@ class RootController(BaseController):
     
     
     @expose('windsre.templates.salesProject')
+    @require(predicates.has_permission('manage', msg=l_('Only for managers')))
     def salesProject(self, **kw):
         """Handle the sales project-page."""
         if kw:
@@ -141,6 +144,31 @@ class RootController(BaseController):
             projectList = project.listProjects()
 
             return dict(page='salesProject', kw=None, projectList=projectList, postAdform=postAdForm, trackPropsform=trackPropsForm )
+        
+    @expose('windsre.templates.trackProps')
+    def trackProps(self, **kw):
+        """Handle the tracking of the props."""
+
+        for key in kw.keys():
+            project = key
+            kw = TrackPropsController(key).readProject()
+
+        projectName =project.replace(".xlsx", "")
+        return dict(page='trackProps', kw=kw, project=project, projectName=projectName, trackPropsForm=trackPropsForm)
+    
+    @expose('windsre.templates.plot')
+    def plot(self, **kw):
+        """Handle the plotting of the graph."""
+        prop_dict = {}
+
+        plotObj = PlotController()
+        print kw
+        prop_dict = plotObj.plotGraph(kw['project'], list(kw['property']))
+
+        projectName =  kw['project'].replace(".xlsx", "")
+        return dict(page='plot', kw=kw, projectName=projectName, prop_dict=prop_dict)
+
+
 
 
     
