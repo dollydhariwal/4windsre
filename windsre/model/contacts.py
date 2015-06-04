@@ -32,9 +32,9 @@ class Contacts(DeclarativeBase):
     __table_args__ = {'extend_existing': True}
 
     contact_id = Column(Integer, autoincrement=True, primary_key=True)
-    contact_name = Column(Unicode(255), unique=True,  nullable=False)
-    contact_email = Column(Unicode(255), unique=True,  nullable=False)
-    contact_counties = Column(Unicode(255), unique=True,  nullable=False)
+    contact_name = Column(Unicode(255), nullable=False)
+    contact_email = Column(Unicode(255), nullable=False)
+    contact_counties = Column(Unicode(255),  nullable=False)
 
     def __repr__(self):
         return None
