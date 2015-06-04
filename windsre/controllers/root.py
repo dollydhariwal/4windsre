@@ -15,6 +15,9 @@ from windsre.lib.base import BaseController
 from windsre.controllers.error import ErrorController
 from windsre.controllers.locateAddresses import AddressController, SelectAddressesForm
 from windsre.controllers.getComps import CompController, CompAddressForm
+from windsre.controllers.project import ProjectController
+from windsre.controllers.salesProject import postAdForm,trackPropsForm
+
 
 
 __all__ = ['RootController']
@@ -119,13 +122,25 @@ class RootController(BaseController):
     
     
     @expose('windsre.templates.getComps')
-    @require(predicates.has_permission('manage', msg=l_('Only for managers')))
     def getComps(self, **kw):
         """Handle the getComps-page."""
         if kw:
             kw['result'] = CompController().findComps(address=kw['address'],zipcode=kw['zipcode'])
 
         return dict(page='getComps', kw=kw, form=CompAddressForm)
+    
+    
+    
+    @expose('windsre.templates.salesProject')
+    def salesProject(self, **kw):
+        """Handle the sales project-page."""
+        if kw:
+            return dict(page='postAds', kw=kw )
+        else:
+            project = ProjectController()
+            projectList = project.listProjects()
+
+            return dict(page='salesProject', kw=None, projectList=projectList, postAdform=postAdForm, trackPropsform=trackPropsForm )
 
 
     
