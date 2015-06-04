@@ -175,6 +175,7 @@ class RootController(BaseController):
         return dict(page='plot', kw=kw, projectName=projectName, prop_dict=prop_dict)
     
     @expose('windsre.templates.generateLeads')
+    @require(predicates.has_permission('manage', msg=l_('Only for managers')))
     def generateLeads(self, **kw):
         """Handle the generate leads -page."""
         if kw:
