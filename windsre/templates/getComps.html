@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <title>Enter the address to get comparables</title>
+</head>
+
+<body>
+	<div class="row">
+    <div class="col-xs-12">
+      <h2>Get Comparables feature of Corral</h2>
+      
+      <p py:if="not kw">In this page you can enter the addresses you wish to get comparables for. </p>		
+      <p py:if="not kw">${form.display()}</p>
+      
+      
+      
+      <span py:if="kw">Here are comp results for the following address $kw.address</span>
+      
+      <?python
+      	addressArray = []
+      	
+      	for key,value in kw.items():
+      		try:
+      			for score in sorted(value.keys()):
+      				for address in value[score]:
+      					addressArray.append(address) 
+      		except:
+      			pass
+      ?>
+      
+		<span py:if="kw">
+      		<ul>
+      			<li py:for="address in addressArray">
+      				<br></br>
+      				<div>$address</div>
+      			</li>
+     	 	</ul>
+		</span>
+ 	</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+ <title>Find the location of addresses on Google Map</title>
+ <style>
+    .table {
+      word-wrap: break-word;
+      table-layout: fixed;
+    }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>The locate address feature of Corral</h2>
+
+      <p>In this page you can enter all the addresses you wish to locate on the map. Please enter address at a new line </p>
+      
+      
+      <!-- ${form.display(value=dict(title='Please enter address/addresses separated by "|"'))} -->
+      
+	</div>
+  </div>
+  <form target="_blank" action="" method="post" onsubmit="return false;" name="map_form">
+  <table cellspacing="0" cellpadding="0" border="0">
+      <tr valign="top">
+        <td>
+            <h4 style="margin:0px;">Input:</h4>
+            <textarea id="geocode_input" wrap="off" style="width:610px; height:80px; white-space:pre;" onchange="DetectDataType('geocode_input');"></textarea>
+            <table cellspacing="0" cellpadding="0" border="0" width="610">
+				<tr valign="middle">
+					<td align="right">
+						<span id="start_span"><button type="button" value="Start geocoding" style="color:#000000; font-weight:bold; background-color:#CCFFCC;" onClick="GeocodeMultiple('geocode_input','geocode_results');" ></button></span>
+					</td>
+				</tr>
+			</table>
+            <div id="options_div" style="display:block;">
+                <div id="universal_options_div" style="display:block; margin-bottom:4px;">
+                </div>
+                <div id="google_options_div" style="display:none;">
+                    <!-- [Google-specific options would go here] -->
+                </div>
+            </div>
+            <div id="map-canvas" style="width: 1000px; height: 800px;"></div>
+            <div id="error_message" align="left" style="width:570px; display:none; color:#CC0000;"></div>
+            
+            <h4 style="margin-bottom:0px;">Results as text: <span id="progress" style="font-weight:normal; font-size:10px;"></span></h4>
+			<table cellspacing="0" cellpadding="0" border="0">
+				<tr valign="top">
+					<td align="center">
+						<textarea cols="60" rows="7" name="data" id="geocode_results" wrap="off" style="white-space:pre;"></textarea>
+						<textarea cols="60" rows="4" name="" id="google_policies_message" wrap="off" style="display:none; white-space:pre;" disabled="disabled">Google's policies do not allow output in text format.</textarea>
+						<div id="error_message" align="left" style="width:570px; display:none; color:#CC0000;"></div>
+						<button type="button" value="clear results box" onclick="ClearResultsBoxAndMap();"></button>
+					</td>
+					
+				</tr>
+			</table>
+        </td>
+      </tr>
+  </table>
+  </form>
+ 
+</body>
+</html>

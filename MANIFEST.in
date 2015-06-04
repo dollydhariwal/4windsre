@@ -1,0 +1,4 @@
+recursive-include windsre/public *
+include windsre/public/favicon.ico
+recursive-include windsre/i18n *
+recursive-include windsre/templates *
