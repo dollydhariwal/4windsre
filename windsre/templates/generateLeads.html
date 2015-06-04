@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <title>Generate Leads</title>
+</head>
+
+<body>
+	<div class="row background">
+    <div class="col-xs-12 well">
+      <h2>Generate Leads</h2>
+      
+  	  <span py:if="projectList">
+  	  	<table border="0" cellpadding="5" style="width:50%">
+      		<tr py:for="project in projectList" >
+      			<form name="${project}" action="${tg.url('/postLeads')}" method="POST">
+      				<input type="hidden" name="$project"></input>
+      				<td>${project}</td>
+  					<td>${postAdform.display()}</td>
+  				</form>
+  			</tr>
+	 	 </table>
+	  </span>
+	  <span py:if="kw">
+	  	<p py:for="x in kw.keys()">$x</p> 
+      </span>
+ 	</div>
+  </div>
+</body>
+</html>

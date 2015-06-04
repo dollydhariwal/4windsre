@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <title>Get xml file for your properties for project ${kw['project']}</title>
+</head>
+
+<body>
+	<div class="row">
+    <div class="col-xs-12 well">
+      <h2>This is a manual process of posting ads to various sites </h2>
+      <p> Since the process is manual it will take 24 hours to 48 hours to reflect the posting.
+          Status can be checked on this page of the listings
+      </p>
+                  
+ 	</div>
+ 	
+ 	<div class="col-xs-12 well">
+ 	<h2>The properties which were posted successfully and their respective links on zillow</h2>
+ 	<table border="0" cellpadding="5" style="width:75%">
+ 		<tr py:for="property in checkStatus['posted']">
+      			<table border="0" cellpadding="5" style="width:75%">
+      			  <tr py:for="key,value in property.items()">
+      				<td>${key}</td>
+      				<td><a href="http://www.zillow.com/homes/${value}_zpid" target="_blank">http://www.zillow.com/homes/${value}_zpid</a></td>
+      				<td>status</td>
+      			  </tr>
+      			</table>
+  		</tr>
+	 </table>
+	 <h2>The properties which could not be posted. Please check if the required fields are there</h2>
+ 	 <table border="0" cellpadding="5" style="width:75%">
+ 	     <tr py:for="property in checkStatus['not-posted']">
+      			<table border="0" cellpadding="5" style="width:75%">
+      			  <tr py:for="key,value in property.items()">
+      				<td>${key}</td>
+      				<td><a href="http://www.zillow.com/homes/${value}_zpid" target="_blank">http://www.zillow.com/homes/${value}_zpid</a></td>
+      				<td>status</td>
+      			  </tr>
+      			</table>
+  		 </tr>
+	 </table>
+ 	</div>
+  </div>
+</body>
+</html>

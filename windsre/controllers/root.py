@@ -19,6 +19,12 @@ from windsre.controllers.project import ProjectController
 from windsre.controllers.salesProject import postAdForm,trackPropsForm
 from windsre.controllers.trackProps import TrackPropsController, trackPropsForm
 from windsre.controllers.plot import PlotController
+from windsre.controllers.generateLeads import postAdForm,postAdMLSForm, GenerateLeadsController
+from windsre.controllers.postAds import PostAdsController, selectProps, postForm
+from windsre.controllers.postLeads import postForm,postMLSForm
+from windsre.controllers.post import PostController
+from windsre.controllers.postAdsMLS import PostMLSController
+
 
 
 
@@ -167,6 +173,52 @@ class RootController(BaseController):
 
         projectName =  kw['project'].replace(".xlsx", "")
         return dict(page='plot', kw=kw, projectName=projectName, prop_dict=prop_dict)
+    
+    @expose('windsre.templates.generateLeads')
+    def generateLeads(self, **kw):
+        """Handle the generate leads -page."""
+        if kw:
+            return dict(page='postAds', kw=kw )
+        else:
+            project = ProjectController()
+            projectList = project.listProjects()
+
+            return dict(page='generateLeads', kw=None, projectList=projectList, postAdform=postAdForm, postAdMLSform=postAdMLSForm )
+
+
+    @expose('windsre.templates.postleads')
+    def postLeads(self, **kw):
+        """Handle the posting of Ads."""
+        for key in kw.keys():
+            project = key
+            kw = PostAdsController(key).readProject()
+
+        return dict(page='postleads', kw=kw, project=project, selectProps=selectProps, postForm=postForm, postMLSForm=postMLSForm)
+    
+    @expose('windsre.templates.postAdsMLS')
+    def postAdsMLS(self, **kw):
+        """Handle the posting of Ads."""
+        print "I am in adsMLS"
+        print kw
+        postObj = PostMLSController()
+        projectName = kw['project'].replace(".xlsx","")
+
+        if kw.has_key('noMLS'):
+            checkStatus = postObj.checkStatus(kw['project'], list(kw['property']))
+            return dict(page='post', kw=kw, projectName=projectName, checkStatus=checkStatus, propertyStatus=None)
+        else:
+            propertyStatus = postObj.createXML(kw['project'], list(kw['property']))
+            return dict(page='postAdsMLS', kw=kw, propertyStatus=propertyStatus, projectName=projectName, checkStatus=None)
+        
+        
+    @expose('windsre.templates.post')
+    def post(self, **kw):
+        """Handle the posting of Ads."""
+        return dict(page='post', kw=kw)
+
+
+
+
 
 
 
