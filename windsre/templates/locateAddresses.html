@@ -15,7 +15,7 @@
 </head>
 <body>
   <div class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-12 well">
       <h2>The locate address feature of Corral</h2>
 
       <p>In this page you can enter all the addresses you wish to locate on the map. Please enter address at a new line </p>
@@ -25,7 +25,7 @@
       
 	</div>
   </div>
-  <form target="_blank" action="" method="post" onsubmit="return false;" name="map_form">
+  <form class="well" target="_blank" action="" method="post" onsubmit="return false;" name="map_form">
   <table cellspacing="0" cellpadding="0" border="0">
       <tr valign="top">
         <td>
@@ -34,7 +34,7 @@
             <table cellspacing="0" cellpadding="0" border="0" width="610">
 				<tr valign="middle">
 					<td align="right">
-						<span id="start_span"><button type="button" value="Start geocoding" style="color:#000000; font-weight:bold; background-color:#CCFFCC;" onClick="GeocodeMultiple('geocode_input','geocode_results');" ></button></span>
+						<span id="start_span"><button class="btn btn-info" type="button" value="Start geocoding" style="color:#000000; font-weight:bold; background-color:#CCFFCC;" onClick="GeocodeMultiple('geocode_input','geocode_results');" >Locate Addresses</button></span>
 					</td>
 				</tr>
 			</table>
@@ -55,7 +55,7 @@
 						<textarea cols="60" rows="7" name="data" id="geocode_results" wrap="off" style="white-space:pre;"></textarea>
 						<textarea cols="60" rows="4" name="" id="google_policies_message" wrap="off" style="display:none; white-space:pre;" disabled="disabled">Google's policies do not allow output in text format.</textarea>
 						<div id="error_message" align="left" style="width:570px; display:none; color:#CC0000;"></div>
-						<button type="button" value="clear results box" onclick="ClearResultsBoxAndMap();"></button>
+						<button class="btn btn-info" type="button" value="clear results box" onclick="ClearResultsBoxAndMap();">Clear</button>
 					</td>
 					
 				</tr>

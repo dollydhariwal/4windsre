@@ -119,6 +119,7 @@ class RootController(BaseController):
     
     
     @expose('windsre.templates.getComps')
+    @require(predicates.has_permission('manage', msg=l_('Only for managers')))
     def getComps(self, **kw):
         """Handle the getComps-page."""
         if kw:
