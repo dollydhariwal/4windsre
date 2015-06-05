@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <title>Welcome to 4WindsRE</title>
+</head>
+
+<body>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="jumbotron">
+        <h1>4Winds Real Estate</h1>
+        <p>We provide a comprehensive solution for the complex problem 
+        of Generating, Managing and Tracking leads. </p>
+        <p>So you do what you know the best and leave to us the rest!!</p>
+        <p>
+          <a class="btn btn-primary btn-lg" href="http://4windsre.com:8080" target="_blank">
+            ${h.icon('book')} Terms and Services
+          </a>
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4 hidden-xs hidden-sm">
+      <a class="btn btn-info btn-sm active" href="${tg.url('/generateLeads')}">${h.icon('book')} Generate Leads</a> <span class="label label-success">new</span><em> for generating leads</em><br/>
+        <br/>
+      <a class="btn btn-info btn-sm active" href="${tg.url('/salesProject')}">${h.icon('book')} Track Leads</a><em> for tracking your leads</em> <br/>
+        <br/>
+      <a class="btn btn-info btn-sm active" href="http://groups.google.com/group/turbogears">${h.icon('book')} Manage Leads</a> <em>for managing leads</em><br/>
+        <br/>
+      <a class="btn btn-info btn-sm active" href="${tg.url('/getComps')}">${h.icon('search')} Get Comparables</a> <em>for getting comps</em><br/>
+        <br/>
+      <a class="btn btn-info btn-sm active" href="${tg.url('/locateAddresses')}">${h.icon('search')} Locate Multiple Addresses</a> <em>for locating addresses</em>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <h3>Generate Leads</h3>
+      <p>Generate leads on the most popular real estate websites</p>
+    </div>
+
+    <div class="col-md-4">
+      <h3>Track Leads</h3>
+      <p>Track your leads through our interface. Tracking your leads provide better
+         judgements and helps you stay ahead in the market </p>
+    </div>
+
+    <div class="col-md-4">
+      <h3>Manage Leads</h3>
+      <p> Managing leads has never been easier.</p>
+      <p> We integrate the leads management with our CRM.</p>
+    </div>
+  </div>
+
+  <em class="pull-right small"> Thank you for choosing 4WindsRE.</em>
+</body>
+</html>
