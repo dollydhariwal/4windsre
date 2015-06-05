@@ -69,6 +69,11 @@ class RootController(BaseController):
         """Handle the 'about' page."""
         return dict(page='about')
 
+    @expose('windsre.templates.contactus')
+    def contactus(self):
+        """Handle the 'about' page."""
+        return dict(page='contactus')
+    
     @expose('windsre.templates.environ')
     def environ(self):
         """This method showcases TG's access to the wsgi environment."""
