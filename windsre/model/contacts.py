@@ -34,8 +34,10 @@ class Contacts(DeclarativeBase):
     contact_id = Column(Integer, autoincrement=True, primary_key=True)
     contact_name = Column(Unicode(255), nullable=False)
     contact_email = Column(Unicode(255), nullable=False)
+    contact_phone = Column(Unicode(255), nullable=False)
     contact_counties = Column(Unicode(255),  nullable=False)
-
+    contact_state = Column(Unicode(255),  nullable=False)
+    
     def __repr__(self):
         return None
 
