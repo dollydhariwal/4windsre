@@ -84,6 +84,8 @@ class RootController(BaseController):
     def data(self, **kw):
         """This method showcases how you can use the same controller for a data page and a display page"""
         return dict(page='data', params=kw)
+
+
     @expose('windsre.templates.index')
     @require(predicates.has_permission('manage', msg=l_('Only for managers')))
     def manage_permission_only(self, **kw):
@@ -151,7 +153,7 @@ class RootController(BaseController):
     
     
     @expose('windsre.templates.salesProject')
-    @require(predicates.has_permission('manage', msg=l_('Only for managers')))
+    @require(predicates.has_permission('track', msg=l_('Only for Trackers')))
     def salesProject(self, **kw):
         """Handle the sales project-page."""
         if kw:
