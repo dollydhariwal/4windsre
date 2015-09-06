@@ -15,6 +15,7 @@ from windsre.lib.base import BaseController
 from windsre.controllers.error import ErrorController
 from windsre.controllers.locateAddresses import AddressController, SelectAddressesForm
 from windsre.controllers.getComps import CompController, CompAddressForm
+from windsre.controllers.salesNearby import FindSalesController, FindSalesAddressForm
 from windsre.controllers.project import ProjectController
 from windsre.controllers.salesProject import postAdForm,trackPropsForm
 from windsre.controllers.trackProps import TrackPropsController, trackPropsForm
@@ -24,6 +25,7 @@ from windsre.controllers.postAds import PostAdsController, selectProps, postForm
 from windsre.controllers.postLeads import postForm,postMLSForm
 from windsre.controllers.post import PostController
 from windsre.controllers.postAdsMLS import PostMLSController
+#from chardet.test import result
 
 
 
@@ -140,6 +142,16 @@ class RootController(BaseController):
     def locateAddresses(self):
         """Handle the 'localteAddresses' page."""
         return dict(page='locateAddresses')
+    
+    
+    @expose('windsre.templates.salesNearby')
+    def salesNearby(self, **kw):
+        """Handle the salesNearby-page."""
+        if kw:
+            kw['result'] = FindSalesController().getListProximateAddress(start_address = kw['address'],radius = kw['radius'])
+                
+          
+        return dict(page='salesNearby', kw=kw, form=FindSalesAddressForm)
     
     
     @expose('windsre.templates.getComps')

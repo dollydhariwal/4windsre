@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <title>Enter the address to get Nearby sales</title>
+</head>
+
+<body>
+	<div class="row">
+    <div class="col-xs-12 well">
+      <h2>Get Sales for the given address</h2>
+      
+      <p py:if="not kw">In this page you can enter the addresses you wish to get nearby sales for. </p>		
+      <p class="form-control btn btn-info" py:if="not kw">${form.display(value="Find Sales")}</p>
+      
+      
+      
+      <span py:if="kw">Here are nearby sales for the following address $kw.address</span>
+      
+      <span py:if="kw">
+      		<ul>
+      			<li py:for="address in kw['result']">
+      				<br></br>
+      				<div>$address</div>
+      			</li>
+     	 	</ul>
+	  </span>
+ 	</div>
+  </div>
+</body>
+</html>
