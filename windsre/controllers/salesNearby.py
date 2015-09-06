@@ -30,8 +30,8 @@ class FindSalesController(BaseController):
         email: the user email/login
         password: the user password (associated with email)
         """
-        self.input_location = "/home/vipul/4windsre/salesdata"
-        self.output_location = "/home/vipul/4windsre/salesresults"
+        self.input_location = "/home/vjain/4windsre/salesdata"
+        self.output_location = "/home/vjain/4windsre/salesresults"
         self.r_constant = 0.02526046
         
         
