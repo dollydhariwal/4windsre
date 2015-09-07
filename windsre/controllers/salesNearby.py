@@ -62,17 +62,17 @@ class FindSalesController(BaseController):
                     for col in range(sheet.ncols):
                         
                         try:
-                            if (col==0 or col==1 or col==2):
+                            if (col==0 or col==1 or col==2 or col==3):
                                 address = "%s %s" % (address,sheet.cell_value(row,col))
-                            elif (col==3):
-                                metadata = "Beds %s |" % sheet.cell_value(row,col)
                             elif (col==4):
-                                metadata = "%s Baths %s |" %(metadata, sheet.cell_value(row,col))
+                                metadata = "Beds %s |" % sheet.cell_value(row,col)
                             elif (col==5):
-                                metadata = "%s Lot Size %s |" %(metadata, sheet.cell_value(row,col))
+                                metadata = "%s Baths %s |" %(metadata, sheet.cell_value(row,col))
                             elif (col==6):
-                                metadata = "%s sqft %s |" %(metadata, sheet.cell_value(row,col))
+                                metadata = "%s Lot Size %s |" %(metadata, sheet.cell_value(row,col))
                             elif (col==7):
+                                metadata = "%s sqft %s |" %(metadata, sheet.cell_value(row,col))
+                            elif (col==8):
                                 metadata = "%s price %s |" %(metadata, sheet.cell_value(row,col))
                         except:
                             pass
@@ -99,7 +99,7 @@ class FindSalesController(BaseController):
         file.close()
         
         address_dict = {}
-        resultDict = {}
+        resultDict = {'test':'test'}
                 
         if start_address != None:
             start_location = self.findSales(start_address)
