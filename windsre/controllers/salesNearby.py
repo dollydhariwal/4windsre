@@ -7,7 +7,7 @@ from tg import redirect, require, flash, url
 import requests
 import urllib2
 import xml.etree.ElementTree as ET
-from geopy.geocoders import GoogleV3
+from geopy.geocoders import Nominatim 
 import os
 import xlrd
 import cPickle as pickle
@@ -64,16 +64,8 @@ class FindSalesController(BaseController):
                         try:
                             if (col==0 or col==1 or col==2 or col==3):
                                 address = "%s %s" % (address,sheet.cell_value(row,col))
-                            elif (col==4):
-                                metadata = "Beds %s |" % sheet.cell_value(row,col)
-                            elif (col==5):
-                                metadata = "%s Baths %s |" %(metadata, sheet.cell_value(row,col))
-                            elif (col==6):
-                                metadata = "%s Lot Size %s |" %(metadata, sheet.cell_value(row,col))
-                            elif (col==7):
-                                metadata = "%s sqft %s |" %(metadata, sheet.cell_value(row,col))
-                            elif (col==8):
-                                metadata = "%s price %s |" %(metadata, sheet.cell_value(row,col))
+                            else:
+                                metadata = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
                         except:
                             pass
                         
@@ -99,7 +91,7 @@ class FindSalesController(BaseController):
         file.close()
         
         address_dict = {}
-        resultDict = {'test':'test'}
+        resultDict = {}
                 
         if start_address != None:
             start_location = self.findSales(start_address)
@@ -208,7 +200,7 @@ class FindSalesController(BaseController):
                 
     def findSales(self, address=None,radius=None):
         salesDict = {}
-        geolocator = GoogleV3()
+        geolocator = Nominatim()
         try:
             location = geolocator.geocode(address)
             salesDict[address]={}
