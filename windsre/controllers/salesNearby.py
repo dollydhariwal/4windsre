@@ -33,8 +33,6 @@ class FindSalesController(BaseController):
         """
         self.input_location = "/home/vjain/4windsre/salesdata"
         self.output_location = "/home/vjain/4windsre/salesresults"
-        self.input_address_location = "/home/vjain/4windsre/addressdata"
-        self.output_address_location = "/home/vjain/4windsre/addressdb/address.pkl"
         self.r_constant = 0.02526046
         
         
@@ -47,48 +45,11 @@ class FindSalesController(BaseController):
         return projectArray
     
     
-    def populateAddresses(self):
-        address_dict = {}
-        addict = {}
-        
-        for filename in os.listdir(self.input_address_location):
-            workbook = xlrd.open_workbook("%s/%s" % (self.input_address_location, filename))
-            sheet = workbook.sheet_by_index(0)
-            
-            for row in range(sheet.nrows):
-                #try:
-                address = ""
-                metadata = ""
-                if (row != 0):
-                    for col in range(sheet.ncols):
-                        
-                        try:
-                            if (col==0 or col==1 or col==2 or col==3):
-                                address = "%s %s" % (address,sheet.cell_value(row,col))
-                            else:
-                                metadata = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
-                        except:
-                            pass
-                        
-                    if address:
-                        addict[address] = metadata
-                        address_file = '%s' % (self.output_address_location)
-                        if os.path.exists(address_file):    
-                            file = open(address_file, 'rb')
-                            address_dict = pickle.load(file)
-                            file.close()
-                                
-                        address_dict = dict(address_dict, **addict)
-                        file = open(address_file, 'wb')
-                        pickle.dump(address_dict,file,protocol=2)
-                        file.close()       
-        
+     
     def getListProximateAddress(self, start_address=None, radius=1):
         address_dict = {}
         resultDict = {}
-        
-        
-                
+ 
         if start_address != None:
             start_location = self.findSales(start_address)
             
@@ -220,9 +181,7 @@ class FindSalesController(BaseController):
                     pass
                         
             
-        else:
-            resultDict[each]=""
-           
+     
                     
         return resultDict           
                         
@@ -231,7 +190,7 @@ class FindSalesController(BaseController):
                 
     def findSales(self, address=None,radius=None):
         salesDict = {}
-        geolocator = GoogleV3()
+        geolocator = Nominatim()
         try:
 	    	salesDict[address]={}
 	    	location = geolocator.geocode(address)

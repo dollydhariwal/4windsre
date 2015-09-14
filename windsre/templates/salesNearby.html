@@ -13,7 +13,8 @@
     <div class="col-xs-12 well">
       <h2>Get Sales for the given address</h2>
       
-      <p py:if="not kw">In this page you can enter the addresses you wish to get nearby sales for. </p>		
+      <p py:if="not kw">In this page you can enter the addresses you wish to get nearby sales for. </p>
+      <p py:if="not kw"> To enter multiple addresses use separator "|".</p>		
       <p class="form-control btn btn-info" py:if="not kw">${form.display(value="Find Sales")}</p>
       
       
@@ -24,29 +25,12 @@
       		<li py:for="address in kw['result']">
 	      		<span py:if="kw">Here are nearby sales for the following address ${address}</span>
 	      		<br></br>
-		      	<?python
-		    	  addressStr = ""
-		    	  addressArray = []
-		    	  #for key,value in kw['result'].items():
-	    	  	  addressStr = "%s --" % address
-	    	  	  salesStr = ""
-	    	  	  #try:
-	    	  	  for key1 in kw['result'][address]:
-	    	  		#salesStr = "%s %s" % (salesStr, kw['result'][address][key1])
-	    	  		salesStr = "%s %s | %s ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" % (salesStr, key1, kw['result'][address][key1])
-	    	  	  #except:
-	    	  	  #	pass
-	    	  		
-	    	  	  addressStr = "%s %s" % (addressStr, salesStr)
-	        	  addressArray.append(addressStr)
-		
-				?>
-		      		<ul>
-		      			<li py:for="each in addressArray">
+	      		<ul>
+		      			<li py:for="each in kw['result'][address]">
 		      				<br></br>
-		      				<div>${each}</div>
+		      				<div>${each} | ${kw['result'][address][each]}</div>
 		      			</li>
-		     	 	</ul>
+		     	 </ul>
 	     	 </li>
      	 </ul>
 	  </span>
