@@ -18,15 +18,37 @@
       
       
       
-      <span py:if="kw">Here are nearby sales for the following address $kw.address</span>
-      
+       
       <span py:if="kw">
-      		<ul>
-      			<li py:for="address in kw['result']">
-      				<br></br>
-      				<div>$address</div>
-      			</li>
-     	 	</ul>
+      	<ul>
+      		<li py:for="address in kw['result']">
+	      		<span py:if="kw">Here are nearby sales for the following address ${address}</span>
+	      		<br></br>
+		      	<?python
+		    	  addressStr = ""
+		    	  addressArray = []
+		    	  #for key,value in kw['result'].items():
+	    	  	  addressStr = "%s --" % address
+	    	  	  salesStr = ""
+	    	  	  #try:
+	    	  	  for key1 in kw['result'][address]:
+	    	  		#salesStr = "%s %s" % (salesStr, kw['result'][address][key1])
+	    	  		salesStr = "%s %s | %s ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" % (salesStr, key1, kw['result'][address][key1])
+	    	  	  #except:
+	    	  	  #	pass
+	    	  		
+	    	  	  addressStr = "%s %s" % (addressStr, salesStr)
+	        	  addressArray.append(addressStr)
+		
+				?>
+		      		<ul>
+		      			<li py:for="each in addressArray">
+		      				<br></br>
+		      				<div>${each}</div>
+		      			</li>
+		     	 	</ul>
+	     	 </li>
+     	 </ul>
 	  </span>
  	</div>
   </div>

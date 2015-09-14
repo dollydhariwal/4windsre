@@ -7,7 +7,8 @@ from tg import redirect, require, flash, url
 import requests
 import urllib2
 import xml.etree.ElementTree as ET
-from geopy.geocoders import Nominatim 
+from geopy.geocoders import Nominatim
+from geopy.geocoders import GoogleV3
 import os
 import xlrd
 import cPickle as pickle
@@ -83,50 +84,80 @@ class FindSalesController(BaseController):
                         file.close()       
         
     def getListProximateAddress(self, start_address=None, radius=1):
-        self.populateAddresses()
-        
-        address_file = '%s' % (self.output_address_location)
-        file = open(address_file, 'rb')
-        address_db = pickle.load(file)
-        file.close()
-        
         address_dict = {}
         resultDict = {}
+        
+        
                 
         if start_address != None:
             start_location = self.findSales(start_address)
             
         projects = self.listProjects()
-        for project in projects:   
-            workbook = xlrd.open_workbook("%s/%s" % (self.input_location, project))
-            sheet = workbook.sheet_by_index(0)
-                       
-            for row in range(sheet.nrows):
-                #try:
-                address = ""
-                for col in range(sheet.ncols):
-                    if (row != 0):
-                        address = "%s %s" % (address, sheet.cell_value(row,col))
-                location = self.findSales(address)
-                        
-                address_file = '%s/%d.pkl' % (self.output_location,int(location[address][0]))
-                if os.path.exists(address_file):    
-                    file = open(address_file, 'rb')
-                    address_dict = pickle.load(file)
-                    file.close()
-                        
-                address_dict = dict(address_dict, **location)
-                file = open(address_file, 'wb')
-                pickle.dump(address_dict,file,protocol=2)
-                file.close()
-                #except:
-                #    pass
+        for project in projects:
+        	workbook = xlrd.open_workbook("%s/%s" % (self.input_location, project))
+        	sheet = workbook.sheet_by_index(0)
+        	
+        	for row in range(sheet.nrows):
+        		metadata = ""
+        		address = ""
+        		sqft = ""
+		        lot = "" 
+		        price = ""
+		        bedStr = ""
+		        bathStr = ""
+		        lotStr = ""
+		        sqftStr = ""
+		        priceStr = ""
+		        #try:
+        		for col in range(sheet.ncols):
+        			if (row != 0):
+        				if (sheet.cell_value(0,col)=="Address" or sheet.cell_value(0,col)=="City" or sheet.cell_value(0,col)=="State" or sheet.cell_value(0,col)=="Zip"):
+        					address = "%s %s" % (address,sheet.cell_value(row,col))
+        				elif (sheet.cell_value(0,col)=="Beds"):
+        					bedStr = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
+        				elif (sheet.cell_value(0,col)=="Baths"):
+        					bathStr = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
+        				elif (sheet.cell_value(0,col)=="LotSize"):
+        					lot = (str(sheet.cell_value(row,col)).strip()).replace(",","")
+        					lotStr = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
+        				elif (sheet.cell_value(0,col)=="SqFT"):
+        					sqft = str(sheet.cell_value(row,col)).strip()
+        					sqftStr = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
+        				elif (sheet.cell_value(0,col)=="Price"):
+        					price = str(sheet.cell_value(row,col)).strip()
+        					priceStr = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
+        					        						
+        		#metadata = "%s | Build Ratio %f | price per sqft %f" %(metadata,  (int(sqft)/int(lot)), (int(price)/int(sqft)))
+        		location = self.findSales(address)
+        		#try:
+        		if (sqft and lot and price):
+        			try:
+        				location[address]['metadata'] = "%s %s %s %s %s Build Ratio %f | price per Sqft %f |" % (bedStr, bathStr, lotStr, sqftStr, priceStr, (float(sqft)/float(lot)), (float(price)/float(sqft)))
+        			except:
+        				pass
+        		else:
+        			location[address]['metadata'] = "%s %s %s %s %s" % (bedStr, bathStr, lotStr, sqftStr, priceStr)
+        		#except:
+        		#	pass
+        			
+        		address_file = '%s/%d.pkl' % (self.output_location,int(location[address]['longlat'][0]))
+        		if os.path.exists(address_file):
+        			file = open(address_file, 'rb')
+        			address_dict = pickle.load(file)					
+        			file.close()
+        			
+        		address_dict = dict(address_dict, **location)
+        		file = open(address_file, 'wb')
+		        pickle.dump(address_dict,file,protocol=2)
+		        file.close()
+        		
+
                 
-        if (start_location[start_address][0]!=0 and start_location[start_address][1]!=0):
+        if (start_location[start_address]['longlat'][0]!=0 and start_location[start_address]['longlat'][1]!=0):
             radius = float(radius)
             
-            latitude = float(start_location[start_address][0])
-            longitude = float(start_location[start_address][1])
+            latitude = float(start_location[start_address]['longlat'][0])
+            longitude = float(start_location[start_address]['longlat'][1])
             lat_min = latitude - (radius * self.r_constant)
             lat_max = latitude + (radius * self.r_constant)
             
@@ -144,10 +175,10 @@ class FindSalesController(BaseController):
                 file.close()
                
                 for each in address_dict:
-                    if address_dict[each][0]>=lat_min and address_dict[each][0]<=lat_max and address_dict[each][1]<=long_max and address_dict[each][1]>=long_min:
+                    if address_dict[each]['longlat'][0]>=lat_min and address_dict[each]['longlat'][0]<=lat_max and address_dict[each]['longlat'][1]<=long_max and address_dict[each]['longlat'][1]>=long_min:
                         result= {}
                         try:
-                            result[each] = address_db[each]
+                            result[each] = address_dict[each]['metadata']
                         except:
                             result[each] = ""
                             
@@ -161,10 +192,10 @@ class FindSalesController(BaseController):
                     file.close()
                 
                     for each in address_dict:
-                        if address_dict[each][0]>=lat_min and address_dict[each][0]<=lat_max and address_dict[each][1]<=long_max and address_dict[each][1]>=long_min:
+                        if address_dict[each]['longlat'][0]>=lat_min and address_dict[each]['longlat'][0]<=lat_max and address_dict[each]['longlat'][1]<=long_max and address_dict[each]['longlat'][1]>=long_min:
                             result= {}
                             try:
-                                result[each] = address_db[each]
+                                result[each] = address_dict[each]['metadata']
                             except:
                                 result[each] = ""
                                 
@@ -177,10 +208,10 @@ class FindSalesController(BaseController):
                     file.close()
                 
                     for each in address_dict:
-                        if address_dict[each][0]<=lat_min and address_dict[each][0]>=lat_max and address_dict[each][1]<=long_max and address_dict[each][1]>=long_min:
+                        if address_dict[each]['longlat'][0]<=lat_min and address_dict[each]['longlat'][0]>=lat_max and address_dict[each]['longlat'][1]<=long_max and address_dict[each]['longlat'][1]>=long_min:
                             result= {}
                             try:
-                                result[each] = address_db[each]
+                                result[each] = address_dict[each]['metadata']
                             except:
                                 result[each] = ""
                                 
@@ -190,7 +221,7 @@ class FindSalesController(BaseController):
                         
             
         else:
-            resultDict = []
+            resultDict[each]=""
            
                     
         return resultDict           
@@ -200,13 +231,13 @@ class FindSalesController(BaseController):
                 
     def findSales(self, address=None,radius=None):
         salesDict = {}
-        geolocator = Nominatim()
+        geolocator = GoogleV3()
         try:
-            location = geolocator.geocode(address)
-            salesDict[address]={}
-            salesDict[address]=(location.latitude,location.longitude)
+	    	salesDict[address]={}
+	    	location = geolocator.geocode(address)
+	    	salesDict[address]['longlat']=(location.latitude,location.longitude)
         except:
-            salesDict[address]=(0,0)
+            salesDict[address]['longlat']=(0,0)
         
         return salesDict
            

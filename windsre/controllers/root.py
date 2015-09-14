@@ -148,7 +148,11 @@ class RootController(BaseController):
     def salesNearby(self, **kw):
         """Handle the salesNearby-page."""
         if kw:
-            kw['result'] = FindSalesController().getListProximateAddress(start_address = kw['address'],radius = kw['radius'])
+        	kw['result'] = {}
+        	addressArray = kw['address'].split('|')
+        	for each in addressArray:
+				address_dict = FindSalesController().getListProximateAddress(start_address = each,radius = kw['radius'])
+            	kw['result'][each] = address_dict
                 
           
         return dict(page='salesNearby', kw=kw, form=FindSalesAddressForm)
