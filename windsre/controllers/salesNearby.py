@@ -200,7 +200,17 @@ class FindSalesController(BaseController):
         
         return salesDict
            
-        
+       
+    def getDict(self, addressStr=None, radius=None):
+    	returnDict = {}
+    	if addressStr:
+    		addressArray = addressStr.split('|')
+        	for each in addressArray:
+        		address_dict = {}
+        		address_dict = self.getListProximateAddress(start_address = each,radius = radius)
+        		returnDict.update({each:address_dict})
+            	
+        return returnDict 
        
     def salesNearby(self,**kw):
         return redirect(url(base_url='/salesNearby'), params=kw)
