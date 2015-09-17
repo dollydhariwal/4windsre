@@ -22,15 +22,30 @@
       	<ul>
       		<li py:for="address in kw['result']">
       			<br></br>
-	      		<span py:if="kw">Here are nearby sales for the following address ${kw['result']}</span>
+	      		<span py:if="kw">Here are nearby sales for the following address ${address}</span>
 	      		<br></br>
-	      		<ul>
-	      			<li py:for="each in kw['result'][address]">
-	      				<br></br>
-	      				<div>${each} | ${kw['result'][address][each]}</div>
-	      			</li>
-		     	 </ul>
-	     	 </li>
+	      		<table border="1" style="width:100%">
+	      			<th> Address </th>
+	      			<th> Beds </th>
+	      			<th> Baths </th>
+	      			<th> Lot Size </th>
+	      			<th> Square feet </th>
+	      			<th> Price </th>
+	      			<th> Build Ratio </th>
+	      			<th> Price/SqFt </th>
+	      			
+	      			<tr py:for="each in kw['result'][address]">
+						<td> $each </td>
+						<?python
+						import re
+				      	dataArray = []
+				      	for value in kw['result'][address][each].split('|'):
+				      		dataArray.append(re.sub('[A-Za-z]','',value))
+				       ?>
+	      			   <td py:for="data in dataArray">${data}</td>
+	      			</tr>
+	      		</table>
+	      	</li>
      	 </ul>
 	  </span>
  	</div>

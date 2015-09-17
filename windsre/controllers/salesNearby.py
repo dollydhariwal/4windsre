@@ -69,6 +69,7 @@ class FindSalesController(BaseController):
 		        lotStr = ""
 		        sqftStr = ""
 		        priceStr = ""
+		        address_dict = {}
 		        #try:
         		for col in range(sheet.ncols):
         			if (row != 0):
