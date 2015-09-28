@@ -13,6 +13,7 @@ import xml.etree.ElementTree as ET
 import cPickle as pickle
 import plotly.plotly as py
 from plotly.graph_objs import *
+import re
 
 
 #from DNS.Type import NULL
@@ -35,11 +36,13 @@ class ProjectController(BaseController):
         """
         self.input_location = "/home/vjain/4windsre/exceldata"
         self.output_location = "/home/vjain/4windsre/excelresults"
+        self.page_source_location = "/home/vjain/4windsre/source"
         self.image_location = "/home/vjain/4windsre/windsre/public/graphs"
         self.xml_location = "/home/vjain/4windsre/windsre/public/xmltemplates"
         self.output_xml_location = "/home/vjain/4windsre/windsre/corral/public/xmlfiles"
         self.photos_location = "/home/vjain/corral/4windsre/windsre/public/photos"
         self._url = 'http://www.zillow.com/webservice'
+        self._zillowUrl = 'http://www.zillow.com/homes/'
         self._privateToken = 'X1-ZWz1azdtprntor_8xo7s'
         py.sign_in('ddhariwal','9nnxcdskrt')
         self.final_dict = {}
@@ -101,6 +104,18 @@ class ProjectController(BaseController):
         
         for view in root.iter('pageViewCount'):
             num_hits = view.find('total').text 
+            
+        if num_hits=='None':
+        	try:
+        		os.system("wget -o  -u %s/%s_zpid -P %s" % (self._zillowUrl, zpid, self.page_source_location))
+        		textfile = open("%s/%s_zpid" % (self._zillowUrl,zpid), "r")
+        		filetext = textfile.read()
+        		textfile.close()
+        		result = re.findall("All time views: [0-9]+,*[0-9]+", filetext)
+        		num_hits = result.split(":")[1].strip()
+        	except:
+        		num_hits = 'None'
+        		
         return num_hits         
              
     def readExcelInput(self, project):
