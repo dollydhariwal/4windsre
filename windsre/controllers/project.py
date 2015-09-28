@@ -36,7 +36,7 @@ class ProjectController(BaseController):
         """
         self.input_location = "/home/vjain/4windsre/exceldata"
         self.output_location = "/home/vjain/4windsre/excelresults"
-        self.page_source_location = "/home/vjain/4windsre/source"
+        self.page_source_loc = "/home/vjain/4windsre/source"
         self.image_location = "/home/vjain/4windsre/windsre/public/graphs"
         self.xml_location = "/home/vjain/4windsre/windsre/public/xmltemplates"
         self.output_xml_location = "/home/vjain/4windsre/windsre/corral/public/xmlfiles"
@@ -97,22 +97,22 @@ class ProjectController(BaseController):
         return property_id
     
     def findHits(self, address=None, zipcode=None):
+        num_hits = 'None'
         zpid = self.getPropertyId(address=address, zipcode=zipcode)
         page = urllib2.urlopen("%s/GetUpdatedPropertyDetails.htm?zws-id=%s&zpid=%s" % (self._url,self._privateToken,zpid)).read()
         root = ET.fromstring(page)
-        num_hits = 'None'
         
         for view in root.iter('pageViewCount'):
             num_hits = view.find('total').text 
             
         if num_hits=='None':
         	try:
-        		os.system("wget -o  -u %s/%s_zpid -P %s" % (self._zillowUrl, zpid, self.page_source_location))
-        		textfile = open("%s/%s_zpid" % (self._zillowUrl,zpid), "r")
+        		os.system("wget -o  -u %s/%s_zpid -P %s" % (self._zillowUrl, zpid, self.page_source_loc))
+	        	textfile = open("%s/%s_zpid" % (self.page_source_loc,zpid), "r")
         		filetext = textfile.read()
         		textfile.close()
-        		result = re.findall("All time views: [0-9]+,*[0-9]+", filetext)
-        		num_hits = result.split(":")[1].strip()
+	        	result = re.findall("All time views: [0-9]+,*[0-9]+", filetext)
+        		num_hits = (((result[0].split(":"))[1]).strip()).replace(",","")
         	except:
         		num_hits = 'None'
         		
@@ -144,7 +144,7 @@ class ProjectController(BaseController):
                                
                 if (row != 0):
                     try: 
-                        address_dict[date_array[0]] = {date_array[1]:{date_array[2]:self.findHits(address="%s %s %s" % (address_dict['Property Address'], address_dict['City'], address_dict['State'] ), zipcode=address_dict['Zip'])}}
+                    	address_dict[date_array[0]] = {date_array[1]:{date_array[2]:self.findHits(address="%s %s %s" % (address_dict['Property Address'], address_dict['City'], address_dict['State'] ), zipcode=address_dict['Zip'])}}
                     except:
                         address_dict[date_array[0]] = {date_array[1]:{date_array[2]: 'unknown'}}
                             

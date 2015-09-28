@@ -32,7 +32,7 @@ class PlotController(BaseController):
     def __init__(self):
         self.output_location = ProjectController()._getOutputLocation()
         self.image_location = ProjectController()._getImageLocation()
-        py.sign_in('ddhariwal','9nnxcdskrt')
+        py.sign_in('ddhariwal','5t502qsxjo')
         
            
     def plotGraph(self,project,addressKeys):
@@ -67,7 +67,7 @@ class PlotController(BaseController):
                 #py.plot(data, filename='%s/%s.png' % (self.image_location, address_file))
                 
             try:
-                py.image.save_as({'data': data}, '%s/%s-%s.png' % (self.image_location,project.replace(".xlsx",""),os.path.basename(address_file)))
+            	py.image.save_as({'data': data}, '%s/%s-%s.png' % (self.image_location,project.replace(".xlsx",""),os.path.basename(address_file)))
             except:
                 pass
         
