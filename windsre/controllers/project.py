@@ -113,6 +113,7 @@ class ProjectController(BaseController):
         		textfile.close()
 	        	result = re.findall("All time views: [0-9]+,*[0-9]+", filetext)
         		num_hits = (((result[0].split(":"))[1]).strip()).replace(",","")
+        		os.system("rm -rf %s/%s_pid" % (self.page_source_loc, pid))
         	except:
         		num_hits = 'None'
         		
