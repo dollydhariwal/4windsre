@@ -98,24 +98,24 @@ class ProjectController(BaseController):
     
     def findHits(self, address=None, zipcode=None):
         num_hits = 'None'
-        zpid = self.getPropertyId(address=address, zipcode=zipcode)
-        page = urllib2.urlopen("%s/GetUpdatedPropertyDetails.htm?zws-id=%s&zpid=%s" % (self._url,self._privateToken,zpid)).read()
-        root = ET.fromstring(page)
+        try:
+        	zpid = self.getPropertyId(address=address, zipcode=zipcode)
+       		page = urllib2.urlopen("%s/GetUpdatedPropertyDetails.htm?zws-id=%s&zpid=%s" % (self._url,self._privateToken,zpid)).read()
+        	root = ET.fromstring(page)
         
-        for view in root.iter('pageViewCount'):
-            num_hits = view.find('total').text 
+        	for view in root.iter('pageViewCount'):
+				num_hits = view.find('total').text 
             
-        if num_hits=='None':
-        	try:
-        		os.system("wget -o  -u %s/%s_zpid -P %s" % (self._zillowUrl, zpid, self.page_source_loc))
+        	if num_hits=='None':
+	    		os.system("wget -o  -u %s/%s_zpid -P %s" % (self._zillowUrl, zpid, self.page_source_loc))
 	        	textfile = open("%s/%s_zpid" % (self.page_source_loc,zpid), "r")
-        		filetext = textfile.read()
-        		textfile.close()
+	    		filetext = textfile.read()
+	    		textfile.close()
 	        	result = re.findall("All time views: [0-9]+,*[0-9]+", filetext)
-        		num_hits = (((result[0].split(":"))[1]).strip()).replace(",","")
-        		os.system("rm -rf %s/%s_pid" % (self.page_source_loc, pid))
-        	except:
-        		num_hits = 'None'
+	    		num_hits = (((result[0].split(":"))[1]).strip()).replace(",","")
+	    		os.system("rm -rf %s/%s_pid" % (self.page_source_loc, pid))
+        except:
+        	num_hits = 'None'
         		
         return num_hits         
              
