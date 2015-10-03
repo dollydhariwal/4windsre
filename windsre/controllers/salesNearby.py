@@ -207,11 +207,17 @@ class FindSalesController(BaseController):
     	if addressStr:
     		addressArray = addressStr.split('|')
         	for each in addressArray:
+        		values = each.split(":")
+        		addressValue = values[0]
         		address_dict = {}
-        		address_dict = self.getListProximateAddress(start_address = each,radius = radius)
-        		returnDict.update({each:address_dict})
+        		address_dict = self.getListProximateAddress(start_address = addressValue,radius = radius)
+        		returnDict.update({addressValue:address_dict})
+        		try:
+        			returnDict[addressValue]["metadata"]="Beds %s  Baths %s  SqFt %s  Lot Size %s  Price %s Price/Sqft %f Build Ratio %f" % ( values[1], values[2], values[3], values[4], values[5], (int(values[5].strip())/int(values[3].strip())), (int(values[3].strip())/int(values[4].strip())) )
+        		except:
+        			returnDict[addressValue]["metadata"]="Values provided do not match the given format!!"
             	
-        return returnDict 
+		return returnDict 
        
     def salesNearby(self,**kw):
         return redirect(url(base_url='/salesNearby'), params=kw)

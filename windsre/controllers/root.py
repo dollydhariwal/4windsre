@@ -164,7 +164,7 @@ class RootController(BaseController):
     
     
     @expose('windsre.templates.salesProject')
-    @require(predicates.has_permission('track', msg=l_('Only for Trackers')))
+    #@require(predicates.has_permission('track', msg=l_('Only for Trackers')))
     def salesProject(self, **kw):
         """Handle the sales project-page."""
         if kw:
