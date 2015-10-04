@@ -58,6 +58,8 @@ class FindSalesController(BaseController):
         	workbook = xlrd.open_workbook("%s/%s" % (self.input_location, project))
         	sheet = workbook.sheet_by_index(0)
         	
+        	total = 0
+        	avgpps = 0.0
         	for row in range(sheet.nrows):
         		metadata = ""
         		address = ""
@@ -70,6 +72,7 @@ class FindSalesController(BaseController):
 		        sqftStr = ""
 		        priceStr = ""
 		        address_dict = {}
+		        total += 1
 		        #try:
         		for col in range(sheet.ncols):
         			if (row != 0):
@@ -95,6 +98,7 @@ class FindSalesController(BaseController):
         		if (sqft and lot and price):
         			try:
         				location[address]['metadata'] = "%s %s %s %s %s Build Ratio %f | price per Sqft %f |" % (bedStr, bathStr, lotStr, sqftStr, priceStr, (float(sqft)/float(lot)), (float(price)/float(sqft)))
+        				avgpps += (float(price)/float(sqft))
         			except:
         				pass
         		else:
@@ -112,7 +116,8 @@ class FindSalesController(BaseController):
         		file = open(address_file, 'wb')
 		        pickle.dump(address_dict,file,protocol=2)
 		        file.close()
-        		
+		        
+        	avgpps = avgpps/total	
 
                 
         if (start_location[start_address]['longlat'][0]!=0 and start_location[start_address]['longlat'][1]!=0):
@@ -213,7 +218,7 @@ class FindSalesController(BaseController):
         		address_dict = self.getListProximateAddress(start_address = addressValue,radius = radius)
         		returnDict.update({addressValue:address_dict})
         		try:
-        			returnDict[addressValue]["metadata"]="Beds %s  Baths %s  SqFt %s  Lot Size %s  Price %s Price/Sqft %f Build Ratio %f" % ( values[1], values[2], values[3], values[4], values[5], (int(values[5].strip())/int(values[3].strip())), (float(values[3].strip())/float(values[4].strip())) )
+        			returnDict[addressValue]["metadata"]="Beds %s  Baths %s  SqFt %s  Lot Size %s  Price %s Price/Sqft %f Build ratio %f" % ( values[1], values[2], values[3], values[4], values[5], (int(values[5].strip())/int(values[3].strip())), (float(values[3].strip())/float(values[4].strip())) )
         		except:
         			returnDict[addressValue]["metadata"]="Values provided do not match the given format!!"
             	
