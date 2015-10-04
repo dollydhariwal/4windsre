@@ -213,7 +213,7 @@ class FindSalesController(BaseController):
         		address_dict = self.getListProximateAddress(start_address = addressValue,radius = radius)
         		returnDict.update({addressValue:address_dict})
         		try:
-        			returnDict[addressValue]["metadata"]="Beds %s  Baths %s  SqFt %s  Lot Size %s  Price %s Price/Sqft %f Build Ratio %f" % ( values[1], values[2], values[3], values[4], values[5], (int(values[5].strip())/int(values[3].strip())), (int(values[3].strip())/int(values[4].strip())) )
+        			returnDict[addressValue]["metadata"]="Beds %s  Baths %s  SqFt %s  Lot Size %s  Price %s Price/Sqft %f Build Ratio %f" % ( values[1], values[2], values[3], values[4], values[5], (int(values[5].strip())/int(values[3].strip())), (float(values[3].strip())/float(values[4].strip())) )
         		except:
         			returnDict[addressValue]["metadata"]="Values provided do not match the given format!!"
             	
