@@ -196,13 +196,20 @@ class FindSalesController(BaseController):
                 
     def findSales(self, address=None,radius=None):
         salesDict = {}
-        geolocator = Nominatim()
-        try:
-	    	salesDict[address]={}
-	    	location = geolocator.geocode(address)
-	    	salesDict[address]['longlat']=(location.latitude,location.longitude)
-        except:
-            salesDict[address]['longlat']=(0,0)
+        geolocator = GoogleV3()
+        #try:
+        salesDict[address]={}
+        if address is not None:
+        	try:
+	        	location = geolocator.geocode(address)
+	        	data = location.raw
+	       	 	latitude = data['geometry']['location']['lat']
+	        	longitude = data['geometry']['location']['lng']
+	        	salesDict[address]['longlat']=(latitude,longitude)
+        	except:
+        	    salesDict[address]['longlat']=(0,0)
+       	else:
+       		salesDict[address]['longlat']=(0,0)
         
         return salesDict
            

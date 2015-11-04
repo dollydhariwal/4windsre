@@ -20,11 +20,19 @@
       <p py:if="not kw"> Please keep the sequence of metadata same for better results</p>				
       <p class="form-control btn btn-info" py:if="not kw">${form.display(value="Find Sales")}</p>
 
-       
       <span py:if="kw">
+        <p> Here is the analysis of current property you are looking at </p>
+        <span py:for="address in kw['result']">
+      		<p>${address}<a href="#${address}">  View</a></p>
+      	</span>
+      </span>
+      
+      <br></br><br></br><br></br><br></br>
+      <span py:if="kw" >
       	<ul>
       		<li py:for="address in kw['result']">
       			<br></br>
+      			<a name="${address}"></a>
 	      		<span py:if="kw">Here are nearby sales for the following address ${address} <br></br> ${kw['result'][address]['metadata']}</span>
 	      		<br></br>
 	      		<table border="1" style="width:100%">
@@ -67,7 +75,7 @@
 	      			</tr>
 	      		</table>
 	      		<br></br>
-	      		<span> Comp Average Price Per Sqft is ${avgpps} and Comp Build ratio is ${avgbr} </span>
+	      		<span><a name="address"></a> Comp Average Price Per Sqft is ${avgpps} and Comp Build ratio is ${avgbr}</span>
 	      	</li>
      	 </ul>
 	  </span>
