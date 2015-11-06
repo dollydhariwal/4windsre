@@ -46,28 +46,44 @@
 	      			<th> Price/SqFt </th>
 	      			<?python
 	      			import re
+	      	
       				avgprice = 0.0
       				sumbr = 0.0
-			      	total = 0
+			      	btotal = 0
+			      	ptotal = 0
+			      	avgpps = 0.0
+			      	avgbr = 0.0
 			      	for each in kw['result'][address]:
 			      		for value in kw['result'][address][each].split('|'):
 			      			if "price per Sqft" in value :
 			      				pps = re.sub('[A-Za-z]','',value)
-			      				avgprice += float(pps)
-			      				total += 1
+			      				if pps:
+			      					avgprice += float(pps)
+			      					ptotal += 1
+			      				
 			      			if "Build Ratio" in value :
 			      				br = re.sub('[A-Za-z]','',value)
-			      				sumbr = sumbr + float(br)
-			      				
-					avgpps = avgprice/total
-					avgbr = sumbr/total
+			      				if br:
+			      					sumbr = sumbr + float(br)
+			      					btotal += 1
+			      					
+			      	if (ptotal == 0):
+			      		ptotal = 1
+			      	if (btotal == 0):
+			      		btotal = 1
+			      					
 				    ?>
+				    <?python
+				    avgpps = float(avgprice)/float(ptotal)
+				    avgbr = float(sumbr)/float(btotal)
+				    ?>
+				    		    
+				    
 	      			<tr py:for="each in kw['result'][address]">
 						<td py:if="each != 'metadata'"> $each </td>
 						<?python
 						import re
 				      	dataArray = []
-				      	total += 1
 				      	for value in kw['result'][address][each].split('|'):
 				      		dataArray.append(re.sub('[A-Za-z]','',value))
 				      	?>
