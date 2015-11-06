@@ -18,7 +18,7 @@
       <p py:if="not kw"> If you wish to enter the metadata for the subject property please use the separator ":"</p>
       <p py:if="not kw"> Like address:beds:baths:sqft:lot size:price</p>
       <p py:if="not kw"> Please keep the sequence of metadata same for better results</p>				
-      <p class="form-control btn btn-info" py:if="not kw">${form.display(value="Find Sales")}</p>
+      <p class="form-control" py:if="not kw">${form.display(value="Find Sales")}</p>
 
       <span py:if="kw">
         <p> Here is the analysis of current property you are looking at </p>
@@ -33,17 +33,19 @@
       		<li py:for="address in kw['result']">
       			<br></br>
       			<a name="${address}"></a>
-	      		<span py:if="kw">Here are nearby sales for the following address ${address} <br></br> ${kw['result'][address]['metadata']}</span>
+	      		<span py:if="kw" class="header">Here are nearby sales for the following address <b>${address}</b> <br></br> ${kw['result'][address]['metadata']}</span>
 	      		<br></br>
 	      		<table border="1" style="width:100%">
-	      			<th> Address </th>
-	      			<th> Beds </th>
-	      			<th> Baths </th>
-	      			<th> Lot Size </th>
-	      			<th> Square feet </th>
-	      			<th> Price </th>
-	      			<th> Build Ratio </th>
-	      			<th> Price/SqFt </th>
+	      			<th class="table-header"> Address </th>
+	      			<th class="table-header"> Beds </th>
+	      			<th class="table-header"> Baths </th>
+	      			<th class="table-header"> Lot Size </th>
+	      			<th class="table-header"> Square feet </th>
+	      			<th class="table-header"> Price </th>
+	      			<th class="table-header"> Build Ratio </th>
+	      			<th class="table-header"> Price/SqFt </th>
+	      		</table>
+	      		<table border="1" style="width:100%" class="table-striped">
 	      			<?python
 	      			import re
 	      	
@@ -91,7 +93,7 @@
 	      			</tr>
 	      		</table>
 	      		<br></br>
-	      		<span><a name="address"></a> Comp Average Price Per Sqft is ${avgpps} and Comp Build ratio is ${avgbr}</span>
+	      		<span class="footer">Comp Average Price Per Sqft is <b>${avgpps}</b> and Comp Average Build ratio is <b>${avgbr}</b></span>
 	      	</li>
      	 </ul>
 	  </span>
