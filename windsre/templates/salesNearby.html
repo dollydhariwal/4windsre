@@ -11,7 +11,7 @@
 <body>
 	<div class="row">
     <div class="col-xs-12 well">
-      <h2>Get Sales for the given address</h2>
+      <h2 align="center">Get Sales for the given address</h2>
       
       <p py:if="not kw">In this page you can enter the addresses you wish to get nearby sales for. </p>
       <p py:if="not kw"> To enter multiple addresses use separator "|".</p>
@@ -21,13 +21,16 @@
       <p class="form-control" py:if="not kw">${form.display(value="Find Sales")}</p>
 
       <span py:if="kw">
-        <p> Here is the analysis of current property you are looking at </p>
-        <span py:for="address in kw['result']">
-      		<p>${address}<a href="#${address}">  View</a></p>
-      	</span>
+        <p align="center">Here is the analysis of current property you are looking at </p>
+        
+        <table border="1" style="width:30%" class="table-striped container">
+	        <tr py:for="address in kw['result']">
+	        	<td>${address}</td><td><a href="#${address}">View</a></td>
+	      	</tr>
+      	</table>
       </span>
       
-      <br></br><br></br><br></br><br></br>
+      &nbsp;&nbsp;
       <span py:if="kw" >
       	<ul>
       		<li py:for="address in kw['result']">
