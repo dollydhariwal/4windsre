@@ -36,19 +36,11 @@
       		<li py:for="address in kw['result']">
       			<br></br>
       			<a name="${address}"></a>
-	      		<span py:if="kw" class="header">Here are nearby sales for the following address <b>${address}</b> <br></br> ${kw['result'][address]['metadata']}</span>
+	      		<span py:if="kw" class="header">Here are nearby sales for the following address <b>${address}</b> <br></br><font size="2" color="blue">${kw['result'][address]['metadata']}</font></span>
 	      		<br></br>
-	      		<table border="1" style="width:100%">
-	      			<th class="table-header"> Address </th>
-	      			<th class="table-header"> Beds </th>
-	      			<th class="table-header"> Baths </th>
-	      			<th class="table-header"> Lot Size </th>
-	      			<th class="table-header"> Square feet </th>
-	      			<th class="table-header"> Price </th>
-	      			<th class="table-header"> Build Ratio </th>
-	      			<th class="table-header"> Price/SqFt </th>
-	      		</table>
-	      		<table border="1" style="width:100%" class="table-striped">
+	      		
+ 	      		<table border="1" style="width:300%" class="table-striped">
+
 	      			<?python
 	      			import re
 	      	
@@ -82,21 +74,50 @@
 				    avgpps = float(avgprice)/float(ptotal)
 				    avgbr = float(sumbr)/float(btotal)
 				    ?>
-				    		    
+				    <tr></tr>
+					<tr class="table-header">
+						<th> Address </th>
+		      			<th> Beds </th>
+		      			<th> Baths </th>
+		      			<th> Lot Size </th>
+		      			<th> Square feet </th>
+		      			<th> Price </th>
+		      			<th> Build Ratio </th>
+		      			<th> Price/SqFt </th>	
+		      			<th></th>
+		      			<th> Comp Price/SqFt </th>	
+		      			<th> Comp Buid Ratio </th>		
+		      		</tr>    
 				    
-	      			<tr py:for="each in kw['result'][address]">
+	      			<tr class="table-row" py:for="each in kw['result'][address]">
 						<td py:if="each != 'metadata'"> $each </td>
 						<?python
 						import re
 				      	dataArray = []
+				      	cmppps=""
+				      	cmpbr=""
+				      	
 				      	for value in kw['result'][address][each].split('|'):
+				      		if "price per Sqft" in value :
+				      			pps=re.sub('[A-Za-z]','',value)
+				      			cmppps = float(pps) - float(avgpps)
+				      		if "Build Ratio" in value :
+				      			br = re.sub('[A-Za-z]','',value)
+				      			if br:
+				      				cmpbr = float(br) - float(avgbr)
+				      			else:
+				      				cmpbr = ""
+				      		
 				      		dataArray.append(re.sub('[A-Za-z]','',value))
 				      	?>
 	      			   <td py:for="data in dataArray" py:if="each != 'metadata'">${data}</td>
+	      			   <td><font size="2" color="blue"> ${cmppps} </font></td>
+	      			   <td><font size="2" color="blue"> ${cmpbr} </font></td>
 	      			</tr>
 	      		</table>
 	      		<br></br>
-	      		<span class="footer">Comp Average Price Per Sqft is <b>${avgpps}</b> and Comp Average Build ratio is <b>${avgbr}</b></span>
+	      		<span class="footer">Comp Average Price Per Sqft is <font size="3" color="blue"><b>${avgpps}</b></font> and Comp Average Build ratio is <font size="3" color="blue"><b>${avgbr}</b></font></span>
+	      		
 	      	</li>
      	 </ul>
 	  </span>
