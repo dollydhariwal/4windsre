@@ -148,6 +148,9 @@ class RootController(BaseController):
     def salesNearby(self, **kw):
         """Handle the salesNearby-page."""
         if kw:
+        	if not kw['radius']:
+        		kw['radius'] = .25
+        		
         	kw['result'] = FindSalesController().getDict(addressStr=kw['address'],radius = kw['radius'])
         
         return dict(page='salesNearby', kw=kw, form=FindSalesAddressForm)

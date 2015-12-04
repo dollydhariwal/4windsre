@@ -46,7 +46,7 @@ class FindSalesController(BaseController):
     
     
      
-    def getListProximateAddress(self, start_address=None, radius=1):
+    def getListProximateAddress(self, start_address=None, radius=None):
         address_dict = {}
         resultDict = {}
  
@@ -85,7 +85,7 @@ class FindSalesController(BaseController):
         				elif (sheet.cell_value(0,col)=="LotSize"):
         					lot = (str(sheet.cell_value(row,col)).strip()).replace(",","")
         					lotStr = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
-        				elif (sheet.cell_value(0,col)=="SqFT"):
+        				elif (sheet.cell_value(0,col)=="SqFt"):
         					sqft = str(sheet.cell_value(row,col)).strip()
         					sqftStr = "%s %s |" % (sheet.cell_value(0,col), sheet.cell_value(row,col))
         				elif (sheet.cell_value(0,col)=="Price"):
